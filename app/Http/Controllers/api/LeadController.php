@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewContact;
 use App\Models\FormEmail;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -48,6 +50,8 @@ class LeadController extends Controller
 
         $new_lead->fill($data);
         $new_lead->save();
+
+        Mail::to('info@boolpress.com')->send(new NewContact($new_lead));
 
 
         $success = true;
