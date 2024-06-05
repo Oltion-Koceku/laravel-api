@@ -7,6 +7,9 @@ use App\Models\Project;
 use App\Models\Technologie;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class ApiController extends Controller
 {
@@ -35,10 +38,23 @@ class ApiController extends Controller
     public function getDetailbySlug($slug){
 
 
-        $detail = Project::where('slug', $slug)->first();
+        $detail = Project::where('slug', $slug)->with('technologie', 'type')->first();
+
+        if ($detail) {
+            $success = true;
+            if ($detail->img) {
+                // $detail->img = asset('storage/' .  $detail->img );
+                $detail->img = Storage::url($detail->img);
+            }else{
+                $detail->img = Storage::url('/uploads/no-img.jpg');
+            }
+        }else{
+            $success = false;
+        }
 
 
-        return response()->json($detail);
+
+        return response()->json(compact('success', 'detail'));
 
 
     }
