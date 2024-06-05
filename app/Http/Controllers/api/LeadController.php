@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 class LeadController extends Controller
 {
@@ -11,7 +13,12 @@ class LeadController extends Controller
 
         $data = $request->all();
 
-        dd($data);
+        $validator = Validator::make($data,
+        [
+            "name" => "requ"
+        ]);
+
+        return response()->json($data);
 
     }
 }
